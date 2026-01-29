@@ -4,6 +4,8 @@
 
 A minimal, zero-dependency Claude Code alternative. Built with an agentic loop in ~300 lines of Python.
 
+*Inspired by [1rgs/nanocode](https://github.com/1rgs/nanocode)*
+
 ![screenshot](screenshot.png)
 
 ## Core Philosophy
@@ -42,20 +44,22 @@ chmod +x nanocode.sh
 ./nanocode.sh
 ```
 
-### 3. (Optional) Install Commands
-If you want to use `nanocode` from anywhere in your terminal:
+### 3. (Optional) Global Installation
+You can make `nanocode` available as a command anywhere on your system.
 
-**Run via NPM:**
-```bash
-npm run nanocode
-```
+**Prerequisites:**
+- [Node.js & NPM](https://nodejs.org/) installed.
+- `python` added to your system PATH.
 
-**Install as a Global Command:**
+**Setup Global Command:**
 Run this in the project root:
 ```bash
 npm link
 ```
-Now you can simply type `nanocode` in any directory to launch the assistant!
+Now you can simply type `nanocode` in any directory to launch it!
+
+**How to Update:**
+Since `npm link` creates a symlink to this directory, any changes you make (or `git pull`) here are **automatically applied** globally. You don't need to run it again unless you move the folder.
 
 ## Commands
 Inside the assistant, use these slash commands:
