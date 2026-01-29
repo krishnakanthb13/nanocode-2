@@ -1,11 +1,18 @@
 import os
 import subprocess
 import sys
+from pathlib import Path
+
+# Add project root to sys.path so we can import fetch_models
+project_root = Path(__file__).parent.absolute()
+sys.path.append(str(project_root))
+
 from fetch_models import fetch_free_models
 
 def load_env():
-    if os.path.exists(".env"):
-        with open(".env") as f:
+    env_path = project_root / ".env"
+    if env_path.exists():
+        with open(env_path) as f:
             for line in f:
                 if "=" in line and not line.startswith("#"):
                     k, v = line.strip().split("=", 1)
@@ -44,9 +51,10 @@ def main():
     
     print(f"\nStarting nanocode with model: {model}\n")
     
-    # Run nanocode.py
+    # Run nanocode.py using its absolute path
     try:
-        subprocess.run([sys.executable, "nanocode.py"], check=True)
+        nanocode_path = project_root / "nanocode.py"
+        subprocess.run([sys.executable, str(nanocode_path)], check=True)
     except KeyboardInterrupt:
         print("\nExiting...")
     except Exception as e:

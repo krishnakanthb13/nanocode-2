@@ -3,9 +3,11 @@
 
 import difflib, glob as globlib, json, os, platform, re, subprocess, sys, urllib.request
 
-# Load .env file if it exists
-if os.path.exists(".env"):
-    with open(".env") as f:
+# Load .env file from the script's directory if it exists
+script_dir = os.path.dirname(os.path.abspath(__file__))
+env_path = os.path.join(script_dir, ".env")
+if os.path.exists(env_path):
+    with open(env_path) as f:
         for line in f:
             if "=" in line and not line.startswith("#"):
                 k, v = line.strip().split("=", 1)

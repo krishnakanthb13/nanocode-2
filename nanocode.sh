@@ -1,11 +1,14 @@
 #!/bin/bash
 
+# Get the directory where the script is located
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
 # Check if .env exists
-if [ ! -f ".env" ]; then
-    echo "[!] .env file not found."
-    if [ -f ".env.example" ]; then
+if [ ! -f "$SCRIPT_DIR/.env" ]; then
+    echo "[!] .env file not found in $SCRIPT_DIR."
+    if [ -f "$SCRIPT_DIR/.env.example" ]; then
         echo "[i] Copying .env.example to .env ..."
-        cp .env.example .env
+        cp "$SCRIPT_DIR/.env.example" "$SCRIPT_DIR/.env"
         echo "[!] Please edit .env and add your OPENROUTER_API_KEY."
         exit 1
     else
@@ -15,4 +18,4 @@ if [ ! -f ".env" ]; then
 fi
 
 # Run launcher
-python3 launcher.py
+python3 "$SCRIPT_DIR/launcher.py"
