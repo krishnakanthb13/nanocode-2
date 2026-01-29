@@ -19,7 +19,7 @@ Nanocode follows a decoupled design where the core agent logic is separated from
 
 ### A. Launch & Selection Phase
 1. **Discovery**: `fetch_models.py` queries OpenRouter's API to find models with zero cost.
-2. **Selection**: `launcher.py` displays these models and allows the user to pick one.
+2. **Selection**: `launcher.py` displays these models in a balanced, two-column layout with a "half and half" split for high information density. Long model names are automatically truncated to ensure UI stability.
 3. **Bootstrapping**: The launcher resolves absolute paths for the project root to ensure `.env` and `nanocode.py` are found even when the current working directory is external. It then spawns the main `nanocode.py` process.
 
 ### B. Core Agentic Loop (`nanocode.py`)
