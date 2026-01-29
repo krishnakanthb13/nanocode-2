@@ -234,10 +234,36 @@ def render_markdown(text):
     return re.sub(r"\*\*(.+?)\*\*", f"{BOLD}\\1{RESET}", text)
 
 
+def get_project_tree():
+    """Generates a condensed project tree for context."""
+    ignore = {'.git', 'node_modules', '__pycache__', '.venv'}
+    tree = []
+    for root, dirs, files in os.walk('.'):
+        dirs[:] = [d for d in dirs if d not in ignore]
+        level = root.replace('.', '').count(os.sep)
+        indent = '  ' * level
+        base = os.path.basename(root)
+        if base:
+            tree.append(f"{indent}📁 {base}/")
+        for f in files:
+            tree.append(f"{indent}  📄 {f}")
+    return "\n".join(tree[:100]) # Limit to top 100 items
+
+
 def main():
     print(f"{BOLD}nanocode{RESET} | {DIM}{MODEL} ({'OpenRouter' if OPENROUTER_KEY else 'Anthropic'}) | {os.getcwd()}{RESET}\n")
     messages = []
-    system_prompt = f"Concise coding assistant. cwd: {os.getcwd()}"
+    
+    # Feature 1: Get Project Tree for initial context
+    tree = get_project_tree()
+    system_prompt = (
+        f"Concise coding assistant. cwd: {os.getcwd()}\n"
+        f"Project Structure:\n{tree}\n\n"
+        "Guidelines:\n"
+        "1. Favor 'edit' over 'write' for small changes.\n"
+        "2. You can call multiple tools in one turn for complex multi-file changes (Batching).\n"
+        "3. If a task requires multiple steps, explain the plan briefly first."
+    )
 
     while True:
         try:
@@ -254,11 +280,12 @@ def main():
                 continue
             if user_input == "/h":
                 print(f"{BOLD}Commands:{RESET}")
-                print("  /c - Clear conversation")
-                print("  /q - Quit")
-                print("  /s - System Info")
+                print("  /c    - Clear conversation")
+                print("  /q    - Quit")
+                print("  /s    - System Info")
                 print("  /save - Save conversation")
-                print("  /h - Help")
+                print("  /fix  - Analyze last error and fix it")
+                print("  /h    - Help")
                 continue
             if user_input == "/s":
                 print(f"{BOLD}System Info:{RESET}")
@@ -274,6 +301,13 @@ def main():
                     json.dump(messages, f, indent=2)
                 print(f"{GREEN}⏺ Saved conversation to {filename}{RESET}")
                 continue
+            
+            # Feature 3: Fix command
+            if user_input.startswith("/fix"):
+                error_context = user_input[4:].strip()
+                if not error_context:
+                    error_context = "Check the last tool output for errors or terminal state and fix it."
+                user_input = f"CRITICAL: There is an error. Please analyze and fix it: {error_context}"
 
             messages.append({"role": "user", "content": user_input})
 

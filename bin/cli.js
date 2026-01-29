@@ -9,8 +9,7 @@ const launcherPath = path.join(projectRoot, 'launcher.py');
 
 // Command to run the python launcher from the current directory
 const child = spawn('python', [launcherPath], {
-    stdio: 'inherit',
-    shell: true
+    stdio: 'inherit'
 });
 
 child.on('exit', (code) => {
