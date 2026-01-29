@@ -1,0 +1,21 @@
+{
+    "name": "nanocode-agent",
+    "version": "0.0.1",
+    "description": "Minimal, zero-dependency AI coding assistant with safety loops.",
+    "author": "Krishna Kanth B",
+    "license": "GPL-3.0",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/krishnakanthb13/nanocode.git"
+    },
+    "bin": {
+        "nanocode": "bin/cli.js"
+    },
+    "scripts": {
+        "nanocode": "python launcher.py",
+        "start": "python launcher.py"
+    },
+    "engines": {
+        "node": ">=14.0.0"
+    }
+}

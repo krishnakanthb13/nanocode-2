@@ -42,6 +42,21 @@ chmod +x nanocode.sh
 ./nanocode.sh
 ```
 
+### 3. (Optional) Install Commands
+If you want to use `nanocode` from anywhere in your terminal:
+
+**Run via NPM:**
+```bash
+npm run nanocode
+```
+
+**Install as a Global Command:**
+Run this in the project root:
+```bash
+npm link
+```
+Now you can simply type `nanocode` in any directory to launch the assistant!
+
 ## Commands
 Inside the assistant, use these slash commands:
 - `/h` - **Help**: Show available commands.

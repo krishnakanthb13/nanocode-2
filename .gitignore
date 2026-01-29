@@ -1,5 +1,6 @@
 .env
-*.json
+chat_*.json
+# We want to keep package.json, so don't use a broad *.json wildcard
 __pycache__/
 *.pyc
 .DS_Store
