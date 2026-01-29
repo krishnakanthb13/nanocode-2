@@ -12,14 +12,15 @@ A minimal, zero-dependency Claude Code alternative. Built with an agentic loop i
 Nanocode is designed to be a transparent, simple, and safe coding assistant. It provides a full agentic loop with tool use while ensuring you are always in control of your filesystem and terminal.
 
 ## Key Features
-- **Agentic Loop**: Continuous reasoning and tool execution.
+- **Smart Context (Auto-Indexing)**: Automatically scans project structure on startup so the AI knows your codebase immediately.
+- **Batching & Planning**: Can perform complex, multi-file changes in a single turn.
 - **Tools**: `read`, `write`, `edit`, `glob`, `grep`, and `bash`.
 - **Safety First**: 
   - **Colored Diffs**: See a preview of file changes (Light Green for additions, Light Red for deletions).
   - **Approval Prompts**: All file writes, edits, and shell commands require manual `y/n` confirmation.
 - **Free Model Support**: Automated fetching and selection of currently available free models on OpenRouter.
 - **Zero Dependencies**: Runs on standard Python 3 libraries. No `pip install` required.
-- **Session Management**: export conversation history to JSON at any time.
+- **Session Management**: Export conversation history to JSON at any time.
 
 ## Quick Start
 
@@ -56,7 +57,7 @@ Run this in the project root:
 ```bash
 npm link
 ```
-Now you can simply type `nanocode` in any directory to launch it!
+Now you can simply type `nanocode` in **any directory** on your system to launch it! It will automatically target the current folder you are in.
 
 **How to Update:**
 Since `npm link` creates a symlink to this directory, any changes you make (or `git pull`) here are **automatically applied** globally. You don't need to run it again unless you move the folder.
@@ -66,6 +67,7 @@ Inside the assistant, use these slash commands:
 - `/h` - **Help**: Show available commands.
 - `/s` - **System Info**: View OS, Python version, current Model, and Provider.
 - `/save` - **Save**: Export the current session history to a timestamped JSON file.
+- `/fix` - **Fix**: Analyze the last error or terminal state and propose a repair.
 - `/c` - **Clear**: Reset the conversation history.
 - `/q` or `exit` - **Quit**: Safely exit the application.
 

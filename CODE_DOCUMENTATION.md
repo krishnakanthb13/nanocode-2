@@ -5,8 +5,8 @@ Nanocode is a minimal agentic coding assistant designed for simplicity and safet
 ## 1. File & Folder Structure
 
 - `nanocode.py`: The core agentie engine containing the main loop, API integration, and tool implementations.
-- `launcher.py`: Entry point for user-friendly startup and model selection.
-- `fetch_models.py`: Utility script to fetch and filter free models from OpenRouter.
+- `launcher.py`: Portable entry point that handles absolute path resolution for its dependencies.
+- `bin/cli.js`: Node.js wrapper that allows `nanocode` to be run as a global command from any directory.
 - `nanocode.bat` / `nanocode.sh`: OS-specific launchers.
 - `.env.example`: Template for environment variables.
 - `LICENSE`: GPL v3 license file.
@@ -18,17 +18,18 @@ Nanocode is a minimal agentic coding assistant designed for simplicity and safet
 Nanocode follows a decoupled design where the core agent logic is separated from the model selection and environment setup phases.
 
 ### A. Launch & Selection Phase
-1. **discovery**: `fetch_models.py` queries OpenRouter's API to find models with zero cost.
+1. **Discovery**: `fetch_models.py` queries OpenRouter's API to find models with zero cost.
 2. **Selection**: `launcher.py` displays these models and allows the user to pick one.
-3. **Bootstrapping**: The launcher sets up the environment (using `.env` or defaults) and spawns the main `nanocode.py` process.
+3. **Bootstrapping**: The launcher resolves absolute paths for the project root to ensure `.env` and `nanocode.py` are found even when the current working directory is external. It then spawns the main `nanocode.py` process.
 
 ### B. Core Agentic Loop (`nanocode.py`)
 The engine operates in a continuous loop:
-- **Input**: User provides a prompt.
-- **Model Call**: Request sent to Claude (Anthropic) or any model via OpenRouter.
-- **Tool Parsing**: If the model response includes a `tool_use` request, the engine intercepts it.
+- **Smart Indexing**: On startup, the engine performs a recursive directory scan (ignoring standard meta-folders) to build a project tree. This is injected as context to minimize exploratory `glob` calls.
+- **Input**: User provides a prompt or uses a command like `/fix`.
+- **Model Call**: Request sent to Claude (Anthropic) or any model via OpenRouter. The system prompt instructs the model on multi-tool batching.
+- **Tool Parsing**: If the model response includes one or more `tool_use` blocks, the engine intercepts them for sequential execution.
 - **Human Approval**: For `write`, `edit`, and `bash`, the user must approve the action after seeing a diff or command preview.
-- **Execution**: Tool runs locally, and results are fed back to the model.
+- **Execution**: Tool runs in the user's *current* terminal directory. tool results are fed back to the model.
 - **Final Output**: The loop ends when the model provides a text response without further tool calls.
 
 ## 3. Core Modules & Functions
