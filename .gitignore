@@ -4,6 +4,3 @@ chat_*.json
 __pycache__/
 *.pyc
 .DS_Store
-
-release_notes.md
-social_media.md
