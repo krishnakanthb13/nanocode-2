@@ -97,6 +97,10 @@ def main():
     model = select_model()
     os.environ["MODEL"] = model
     
+    # Enable reasoning/thinking if using OpenRouter
+    if "/" in model: 
+        os.environ["INCLUDE_REASONING"] = "true"
+    
     print(f"\nStarting nanocode with model: {model}\n")
     
     # Run nanocode.py using its absolute path

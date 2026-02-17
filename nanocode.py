@@ -16,6 +16,7 @@ if os.path.exists(env_path):
 OPENROUTER_KEY = os.environ.get("OPENROUTER_API_KEY")
 API_URL = "https://openrouter.ai/api/v1/messages" if OPENROUTER_KEY else "https://api.anthropic.com/v1/messages"
 MODEL = os.environ.get("MODEL", "anthropic/claude-opus-4.5" if OPENROUTER_KEY else "claude-opus-4-5")
+INCLUDE_REASONING = os.environ.get("INCLUDE_REASONING", "false").lower() == "true"
 
 # ANSI colors
 RESET, BOLD, DIM = "\033[0m", "\033[1m", "\033[2m"
@@ -26,7 +27,7 @@ BLUE, CYAN, GREEN, YELLOW, RED = (
     "\033[33m",
     "\033[31m",
 )
-L_GREEN, L_RED = "\033[92m", "\033[91m"
+L_GREEN, L_RED, GRAY = "\033[92m", "\033[91m", "\033[90m"
 
 
 def confirm_diff(path, old_text, new_text):
@@ -205,17 +206,19 @@ def make_schema():
 
 
 def call_api(messages, system_prompt):
+    payload = {
+        "model": MODEL,
+        "max_tokens": 8192,
+        "system": system_prompt,
+        "messages": messages,
+        "tools": make_schema(),
+    }
+    if INCLUDE_REASONING and OPENROUTER_KEY:
+        payload["include_reasoning"] = True
+
     request = urllib.request.Request(
         API_URL,
-        data=json.dumps(
-            {
-                "model": MODEL,
-                "max_tokens": 8192,
-                "system": system_prompt,
-                "messages": messages,
-                "tools": make_schema(),
-            }
-        ).encode(),
+        data=json.dumps(payload).encode(),
         headers={
             "Content-Type": "application/json",
             "anthropic-version": "2023-06-01",
@@ -293,6 +296,7 @@ def main():
                 print(f"  Python: {sys.version.split()[0]}")
                 print(f"  Directory: {os.getcwd()}")
                 print(f"  Model: {MODEL}")
+                print(f"  Reasoning: {'Enabled' if INCLUDE_REASONING else 'Disabled'}")
                 continue
             if user_input == "/save":
                 import time
@@ -314,12 +318,22 @@ def main():
             # agentic loop: keep calling API until no more tool calls
             while True:
                 response = call_api(messages, system_prompt)
+                
+                # Feature: Display reasoning/thinking if present (OpenRouter)
+                reasoning = response.get("reasoning")
+                if reasoning:
+                    print(f"\n{GRAY}💭 Thinking: {reasoning.strip()}{RESET}")
+
                 content_blocks = response.get("content", [])
                 tool_results = []
 
                 for block in content_blocks:
                     if block["type"] == "text":
                         print(f"\n{CYAN}⏺{RESET} {render_markdown(block['text'])}")
+                    
+                    # Handle thinking/reasoning blocks if they come in content
+                    elif block["type"] in ("reasoning", "thought", "thinking"):
+                        print(f"\n{GRAY}💭 Thinking: {block.get('text', block.get('reasoning', '')).strip()}{RESET}")
 
                     if block["type"] == "tool_use":
                         tool_name = block["name"]
