@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """nanocode - minimal claude code alternative"""
 
-import difflib, glob as globlib, json, os, platform, re, subprocess, sys, urllib.request
+import difflib, glob as globlib, json, os, platform, re, shutil, subprocess, sys, urllib.request
 
 # Load .env file from the script's directory if it exists
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -111,7 +111,30 @@ def grep(args):
 def bash(args):
     cmd = args["bash"] if "bash" in args else args.get("cmd", "")
     if not cmd: return "error: no command"
+    
+    # Environment Check
+    os_name = platform.system()
+    shell_name = os.environ.get("COMSPEC", "cmd.exe") if os_name == "Windows" else os.environ.get("SHELL", "/bin/sh")
+    
+    # Simple dependency check
+    parts = cmd.replace("&&", ";").replace("||", ";").split(";")
+    first_cmd = parts[0].strip().split()
+    binary = ""
+    for p in first_cmd:
+        if "=" not in p and p not in ("cd", "set", "export"):
+            binary = p.strip('"\'')
+            break
+    
+    has_dep = shutil.which(binary) is not None if binary else True
+    
     print(f"\n{BOLD}{YELLOW}Run command: {RESET}{cmd}")
+    print(f"{DIM}  System: {os_name} | Shell: {shell_name}{RESET}")
+    if binary:
+        if has_dep:
+            print(f"  {GREEN}✓ Dependency: '{binary}' is installed.{RESET}")
+        else:
+            print(f"  {RED}⚠ Warning: '{binary}' was not found in PATH.{RESET}")
+
     if input(f"{BOLD}Approve? (y/n): {RESET}").lower() != "y":
         return "error: user rejected command"
     proc = subprocess.Popen(
@@ -321,7 +344,7 @@ def main():
                 
                 # Feature: Display reasoning/thinking if present (OpenRouter)
                 reasoning = response.get("reasoning")
-                if reasoning:
+                if reasoning and reasoning.strip():
                     print(f"\n{GRAY}💭 Thinking: {reasoning.strip()}{RESET}")
 
                 content_blocks = response.get("content", [])
@@ -333,7 +356,9 @@ def main():
                     
                     # Handle thinking/reasoning blocks if they come in content
                     elif block["type"] in ("reasoning", "thought", "thinking"):
-                        print(f"\n{GRAY}💭 Thinking: {block.get('text', block.get('reasoning', '')).strip()}{RESET}")
+                        r_text = block.get('text', block.get('reasoning', '')).strip()
+                        if r_text:
+                            print(f"\n{GRAY}💭 Thinking: {r_text}{RESET}")
 
                     if block["type"] == "tool_use":
                         tool_name = block["name"]

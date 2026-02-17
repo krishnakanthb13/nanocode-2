@@ -28,7 +28,9 @@ The engine operates in a continuous loop:
 - **Input**: User provides a prompt or uses a command like `/fix`.
 - **Model Call**: Request sent to Claude (Anthropic) or any model via OpenRouter. The system prompt instructs the model on multi-tool batching.
 - **Tool Parsing**: If the model response includes one or more `tool_use` blocks, the engine intercepts them for sequential execution.
+- **Thinking Blocks**: High-capability models may return a `reasoning` or `thought` block. The engine renders these in gray text to provide insight into the AI's planning process without cluttering the main output.
 - **Human Approval**: For `write`, `edit`, and `bash`, the user must approve the action after seeing a diff or command preview.
+- **Bash Stability**: The `bash` tool performs a "pre-flight check" by parsing the command to identify the primary binary and verifying its presence in the system `PATH` using `shutil.which`.
 - **Execution**: Tool runs in the user's *current* terminal directory. tool results are fed back to the model.
 - **Final Output**: The loop ends when the model provides a text response without further tool calls.
 

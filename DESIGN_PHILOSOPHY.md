@@ -10,6 +10,8 @@ Nanocode was built to provide a **transparent, single-file alternative** that gi
 
 ## 3. Design Principles
 - **Safety First**: "Human-in-the-loop" is not an optional feature; it is the core architecture. Every modification must be approved.
+- **Pre-flight Verification**: Before running a command or writing a file, we provide the context (OS, Shell, Missing Dependencies) so the user can make an informed decision.
+- **Thought Transparency**: We believe in displaying the AI's internal reasoning. It builds trust by showing the "why" behind the tool calls.
 - **Radical Minimalism**: Use only what Python provides by default. No external libraries, no complex abstractions.
 - **Location Agnostic**: The tool should work precisely the same whether run inside its installation folder or globally via a system PATH. Your data stays where you run the tool.
 - **Instant Context**: Use lightweight, non-indexed scans to give the AI a "head start" without the overhead of heavy background indexing services.

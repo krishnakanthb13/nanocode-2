@@ -17,7 +17,9 @@ Nanocode is designed to be a transparent, simple, and safe coding assistant. It 
 - **Tools**: `read`, `write`, `edit`, `glob`, `grep`, and `bash`.
 - **Safety First**: 
   - **Colored Diffs**: See a preview of file changes (Light Green for additions, Light Red for deletions).
+  - **Bash Pre-flight Checks**: Automatically identifies and checks for dependencies (installed or missing) and shell info before you approve commands.
   - **Approval Prompts**: All file writes, edits, and shell commands require manual `y/n` confirmation.
+- **Thinking Process Display**: Real-time rendering of the model's internal reasoning (dimmed for clarity) for supported models.
 - **Free Model Support**: Automated fetching and advanced filtering (Tool Calling, Vision, Reasoning) of currently available free models on OpenRouter.
 - **Zero Dependencies**: Runs on standard Python 3 libraries. No `pip install` required.
 - **Session Management**: Export conversation history to JSON at any time.
