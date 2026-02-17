@@ -18,8 +18,8 @@ Nanocode is a minimal agentic coding assistant designed for simplicity and safet
 Nanocode follows a decoupled design where the core agent logic is separated from the model selection and environment setup phases.
 
 ### A. Launch & Selection Phase
-1. **Discovery**: `fetch_models.py` queries OpenRouter's API to find models with zero cost.
-2. **Selection**: `launcher.py` displays these models in a balanced, two-column layout with a "half and half" split for high information density. Long model names are automatically truncated to ensure UI stability.
+1. **Discovery**: `fetch_models.py` queries OpenRouter's API to find models with zero cost. It parses rich metadata to identify capabilities like tool use, vision, and reasoning.
+2. **Selection**: `launcher.py` provides an interactive filter menu (Tools, JSON, Reasoning, Vision) followed by a balanced, two-column model list for high information density. Long model names are automatically truncated to ensure UI stability.
 3. **Bootstrapping**: The launcher resolves absolute paths for the project root to ensure `.env` and `nanocode.py` are found even when the current working directory is external. It then spawns the main `nanocode.py` process.
 
 ### B. Core Agentic Loop (`nanocode.py`)
@@ -39,7 +39,8 @@ The engine operates in a continuous loop:
 | `call_api` | `nanocode.py` | Handles HTTPS requests to OpenRouter/Anthropic. |
 | `confirm_diff` | `nanocode.py` | Generates and displays colored diffs for user approval. |
 | `run_tool` | `nanocode.py` | Routes tool requests to their respective implementations. |
-| `fetch_free_models`| `fetch_models.py` | Parses OpenRouter model pricing data. |
+| `fetch_free_models`| `fetch_models.py` | Fetches and parses OpenRouter models with zero pricing. |
+| `filter_models` | `fetch_models.py` | Filters models by keys like `tools`, `vision`, or `reasoning`. |
 | `main` | `nanocode.py` | Manages the conversation state and agentic loop. |
 
 ## 4. Data Flow

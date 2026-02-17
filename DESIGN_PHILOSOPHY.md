@@ -14,7 +14,7 @@ Nanocode was built to provide a **transparent, single-file alternative** that gi
 - **Location Agnostic**: The tool should work precisely the same whether run inside its installation folder or globally via a system PATH. Your data stays where you run the tool.
 - **Instant Context**: Use lightweight, non-indexed scans to give the AI a "head start" without the overhead of heavy background indexing services.
 - **Information Density**: Deliver maximum utility with minimal UI friction. Our multi-column, truncated model selection ensures large sets of data are consumed quickly and cleanly.
-- **Accessibility**: Support free models by default to ensure anyone with an internet connection can use agentic AI for coding.
+- **Accessibility**: Support free models by default. To address the "noise" in the free model ecosystem, we use capability-based discovery (filtering by Tools, Vision, etc.) so users can find the most capable free models instantly.
 
 ## 4. Target Audience & Use Cases
 - **Audience**: Developers who want a lightweight, local assistant they can trust; students learning AI interactions; and power users who need a quick "Swiss Army Knife" for codebase exploration.
