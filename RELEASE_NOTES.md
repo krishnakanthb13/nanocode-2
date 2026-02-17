@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
  
+## [v0.0.12] - 2026-02-17
+### "Crystal Clear Reasoning" - Safety & Transparency Update
+
+This update introduces deep transparency into the model's intent and advanced environment awareness.
+
+### 🚀 New Features
+- **Capability Discovery**: Interactive filtering for free models by Tool Calling, JSON/Structured Output, Reasoning, and Vision capabilities.
+- **Thinking Process Display**: Real-time rendering of the model's internal reasoning (dimmed for visual focus) for supported models.
+- **Bash Pre-flight Checks**: Automatically identifies primary binaries in commands and verifies their installation status in the system `PATH` before you approve.
+- **Environment Awareness**: Displays the current OS and active Shell (CMD/Bash/Zsh) for every proposed command.
+
+### ⚡ Improvements
+- **Filtered Free Models**: Upgraded the model scraper to parse rich metadata, helping you find the most capable $0 models instantly.
+- **Improved UI**: Cleaner display for reasoning blocks with empty-check logic to prevent UI clutter.
+- **System Diagnostics**: Added Reasoning status and detailed environment info to the `/s` command.
+
+---
+
 ## [v0.0.8] - 2026-01-29
 ### "UI & Density Update" - UX Enhancements
  
@@ -62,18 +80,20 @@ The first public version of **nanocode**, a minimal, zero-dependency Claude Code
 
 ---
 
-## Complete Feature Overview (v0.0.7)
-This section summarizes all capabilities included in the initial launch phase of **nanocode**.
+## Complete Feature Overview (v0.0.12)
+This section summarizes all capabilities included in the latest version of **nanocode**.
 
-### 🧠 Intelligence & Context
+### 🧠 Intelligence & Transparency
 - **Smart Agent Loop**: A continuous cycle of reasoning, tool selection, and execution.
-- **Smart Context (Auto-Indexing)**: Instantly scans your project tree on startup so the AI doesn't have to "explore" to find your files.
+- **Thinking Process Display**: Watch the model "think" in real-time. Reasoning blocks are rendered in a distinct gray style to show the logic behind every action.
+- **Smart Context (Auto-Indexing)**: Instantly scans your project tree on startup so the AI has immediate visibility into your files.
 - **Multi-File Batching**: The AI can plan and perform edits across multiple files in a single response turn.
 
-### 🛡️ Radical Safety (Human-in-the-Loop)
+### 🛡️ Radical Safety & Pre-flight
 - **Unified Diff Previews**: Every file change is shown in the terminal with colored ANSI highlights (Green for additions, Red for deletions).
-- **Mandatory Approval**: No file is written, and no command is run without the user typing `y`.
-- **Sandbox-like Execution**: All operations occur in your local directory under your direct supervision.
+- **Bash Pre-flight Checks**: The agent scans proposed commands and alerts you if a dependency (like `npm`, `git`, or `python`) is missing from your `PATH`.
+- **Environment Context**: Automatically detects and displays your OS and Shell for every command proposal.
+- **Mandatory Approval**: No file is written, and no command is run without manual confirmation (`y/n`).
 
 ### 🌍 Portability & Speed
 - **Global Utility**: `npm link` support allows you to run `nanocode` in any folder on your machine.
@@ -89,6 +109,7 @@ This section summarizes all capabilities included in the initial launch phase of
     - `/c`: Clear memory to maintain a lean context.
     - `/h`: Detailed help and command menu.
 
-### 🆓 Accessibility
-- **Free Model Scraper**: Automatically finds and ranks currently available zero-cost models on OpenRouter so you can build for free.
+### 🆓 Accessibility & Flexibility
+- **Capability Scraper**: Automatically finds and filters free models on OpenRouter by Tool Calling, Vision, Reasoning, and JSON support.
 - **Anthropic Native Support**: Optimized for Claude 3.5 Sonnet and Opus tool-calling patterns.
+- **Environment Logic**: Uses native Python libraries (`shutil`, `urllib`) for cross-platform reliability without external bloat.
